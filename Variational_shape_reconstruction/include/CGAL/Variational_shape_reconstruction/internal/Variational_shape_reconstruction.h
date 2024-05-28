@@ -14,11 +14,7 @@
 #include <CGAL/Search_traits_adapter.h>
 #include <CGAL/Splitters.h>
 
-<<<<<<< HEAD
-#include "trianglefit.h"
-=======
 #include "generator.h"
->>>>>>> e07eca01c3c7c2b979efcef3cb3b2ea423b16ef1
 #include "clustering.h"
 #include "trianglefit.h"
 
@@ -34,15 +30,6 @@ class Variational_shape_reconstruction
 {
     private:
 
-<<<<<<< HEAD
-        // generators
-        size_t m_generator_count;
-        std::vector<int> m_generators;
-
-        // geometry
-        std::vector<std::pair<Point, size_t> > m_points;
-        Pointset pointset_;
-=======
         // Partition
         std::map<int, int> m_vlabels;
 
@@ -52,7 +39,6 @@ class Variational_shape_reconstruction
         // geometry
         std::vector<std::pair<Point, size_t> > m_points;
         Pointset m_pointset;
->>>>>>> e07eca01c3c7c2b979efcef3cb3b2ea423b16ef1
 
         // KNN tree
         KNNTree m_tree;
@@ -60,19 +46,6 @@ class Variational_shape_reconstruction
         
         double m_euclidean_distance_weight;
 
-<<<<<<< HEAD
-        //init
-        Bbox m_bbox;
-        double m_diag;
-        double m_spacing;
-
-        TriangleFit m_triangle_fit;
-        std::vector<int> m_generators_count;
-        std::shared_ptr<Clustering> m_cluster;
-
-        // int m_verbose_level;
-        INIT_QEM_GENERATORS m_init_generators = INIT_QEM_GENERATORS::KMEANS_FARTHEST;
-=======
 
         // init
         Bbox m_bbox;
@@ -83,29 +56,17 @@ class Variational_shape_reconstruction
         //std::vector<int> m_generators_count;
         std::shared_ptr<Clustering> m_pClustering;
 
->>>>>>> e07eca01c3c7c2b979efcef3cb3b2ea423b16ef1
         VERBOSE_LEVEL m_verbose_level = VERBOSE_LEVEL::HIGH;
         INIT_QEM_GENERATORS m_init_qem_generators = INIT_QEM_GENERATORS::FARTHEST;
 
     public:
 
     Variational_shape_reconstruction(const Pointset& pointset,
-<<<<<<< HEAD
-    int generator_count,
-    double euclidean_distance_weight,
-    VERBOSE_LEVEL verbose_level,
-    INIT_QEM_GENERATORS INIT_QEM_GENERATORS
-    ) :
-    m_verbose_level(verbose_level),
-    m_init_generators(INIT_QEM_GENERATORS),
-    m_generator_count(generator_count),
-=======
         const int nb_generators,
         const FT euclidean_distance_weight,
         const VERBOSE_LEVEL verbose_level,
         const INIT_QEM_GENERATORS init_qem_generator) :
     m_verbose_level(verbose_level),
->>>>>>> e07eca01c3c7c2b979efcef3cb3b2ea423b16ef1
     m_euclidean_distance_weight(euclidean_distance_weight)
     {
         m_pointset = pointset;
@@ -122,92 +83,15 @@ class Variational_shape_reconstruction
 
         m_pClustering = std::make_shared<Clustering>(pointset, m_num_knn, m_euclidean_distance_weight, m_verbose_level);
 
-<<<<<<< HEAD
-        std::cout << "Initialization" << std::endl;
-        switch(m_init_generators)
-        {
-            case INIT_QEM_GENERATORS::KMEANS_PLUSPLUS:
-                init_random_generators_kmeanspp();
-                if(m_verbose_level != VERBOSE_LEVEL::LOW)
-                {
-                    std::cout<<"Initialization method : KMEANS_PLUSPLUS\n";
-                }
-            break;
-            case INIT_QEM_GENERATORS::KMEANS_FARTHEST:
-                init_random_generators_kmeans_farthest();
-                if(m_verbose_level != VERBOSE_LEVEL::LOW)
-                {
-                    std::cout << "Initialization method : KMEANS_FARTHEST" << std::endl;
-                }
-            break;
-            default:
-                init_random_generators();
-                if(m_verbose_level != VERBOSE_LEVEL::LOW)
-                {
-                    std::cout << "Initialization method : RANDOM" << std::endl;
-                }
-            break;
-
-        }
-        m_cluster->initialize_qem_map(m_tree);
-        m_cluster->initialize_vertex_qem(m_tree, m_generators);
-
-        auto point_cloud = get_point_cloud_clustered();
-        if(m_verbose_level == VERBOSE_LEVEL::HIGH)
-        {
-            // Write a point cloud of the generators with random colors
-            std::ofstream clustering_file;
-            clustering_file.open("clustering_init.ply");
-            clustering_file << "ply\n"
-                        << "format ascii 1.0\n"
-                        << "element vertex " << m_generators.size() << "\n"
-                        << "property float x\n"
-                        << "property float y\n"
-                        << "property float z\n"
-                        << "property uchar red\n"
-                        << "property uchar green\n"
-                        << "property uchar blue\n"
-                        << "end_header\n";
-            std::vector<Vector> colors;
-            for(int i = 0 ; i < m_generators.size(); i++)
-            {
-                double r = (double) rand() / (RAND_MAX);
-                double g = (double) rand() / (RAND_MAX);
-                double b = (double) rand() / (RAND_MAX);
-                colors.push_back(Vector(r,g,b));
-            }
-            int point_index =0;
-            int generator_index=0;
-            for(Pointset::const_iterator it = point_cloud.begin(); it != point_cloud.end(); ++ it)
-            {
-                if(std::find(m_generators.begin(),m_generators.end(),point_index)!=m_generators.end())
-                {
-                    auto point = point_cloud.point(*it);
-                    clustering_file << point.x() << " " << point.y() << " " << point.z() << " ";
-                    auto normal = colors[generator_index++];
-                    int r = static_cast<int>(255*normal.x());
-                    int g = static_cast<int>(255*normal.y());
-                    int b = static_cast<int>(255*normal.z());
-                    clustering_file << r << " " << g << " " << b << std::endl;
-                }
-                point_index++;
-            }
-            clustering_file.close();
-            std::cout << "clustering at initialization written to disk" << std::endl;
-        }
-=======
         // init QEM per point and per "vertex" (a point and its neighborhood)
         m_pClustering->initialize_qem_per_point(m_tree);
         m_pClustering->initialize_qem_per_vertex(m_tree);
->>>>>>> e07eca01c3c7c2b979efcef3cb3b2ea423b16ef1
 
         // init generators
         initialize_generators(init_qem_generator, nb_generators);
         init_generator_qems(); // init qem of generators and related optimal locations
     }
 
-<<<<<<< HEAD
-=======
     void init_generator_qems()
     {
         std::vector<Generator>::iterator it;
@@ -253,7 +137,6 @@ class Variational_shape_reconstruction
 
 
 
->>>>>>> e07eca01c3c7c2b979efcef3cb3b2ea423b16ef1
     /// @brief load the points from a pointset to the m_points list
     /// @param pointset 
     void load_points(const Pointset& pointset)
@@ -545,33 +428,15 @@ class Variational_shape_reconstruction
     /// @brief automatic clustering
     void clustering(const size_t steps,const double split_threshold)
     {
-        // int generators = 6; // ???
+        int generators = 6; // ???
         int iteration = 0;
 
         while(iteration++ < steps)
         {
-<<<<<<< HEAD
-            region_growing_and_update_poles(steps);
-            // generators = guided_split_clusters(split_threshold, iteration++);
-        }
-    }
-
-    /// @brief automatic reconstruction
-    bool reconstruction()
-    {
-        const double dist_ratio = 10e-3;
-        const double fitting = 0.4;
-        const double coverage = 0.3;
-        const double complexity = 0.3;
-        
-        return reconstruction(dist_ratio, fitting, coverage, complexity, true);
-    }
-=======
             partition_and_update_generators(steps);
             generators = guided_split_clusters(split_threshold, iteration++);
         }
     }
->>>>>>> e07eca01c3c7c2b979efcef3cb3b2ea423b16ef1
 
 
     const Polyhedron& get_reconstructed_mesh()

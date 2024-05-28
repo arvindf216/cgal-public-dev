@@ -8,9 +8,6 @@
 #include <CGAL/Triangulation_data_structure_3.h>
 #include <CGAL/Point_set_3.h>
 
-#ifndef TYPE_H
-#define TYPE_H
-
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel     Kernel;
 

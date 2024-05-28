@@ -29,7 +29,7 @@ int main()
 {	
     // fixme: this assumes that the normals are read from the file
     Pointset pointset;
-    if (!CGAL::IO::read_XYZ( "sphere.xyz",pointset))
+    if (!CGAL::IO::read_XYZ("../data/sphere.xyz",pointset))
     {
         std::cerr << "Error: cannot read file " << std::endl;
         return EXIT_FAILURE;
@@ -76,7 +76,7 @@ int main()
     // save output mesh
 	auto mesh = vsr.get_reconstructed_mesh();
     std::ofstream mesh_file;
-    mesh_file.open("output.off");
+    mesh_file.open("sphere_mesh.off");
     CGAL::write_off(mesh_file, mesh);
     mesh_file.close();
 

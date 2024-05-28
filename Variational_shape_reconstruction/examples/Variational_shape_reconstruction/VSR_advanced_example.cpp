@@ -64,7 +64,7 @@ int main()
 
 	auto mesh = vsr.get_reconstructed_mesh();
     std::ofstream mesh_file;
-    mesh_file.open("mesh.off");
+    mesh_file.open("advanced_mesh.off");
     CGAL::write_off(mesh_file, mesh);
     mesh_file.close();
 

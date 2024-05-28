@@ -24,7 +24,7 @@ typedef CGAL::Point_set_3< Point, Vector > Pointset;
 int main()
 {	
     Pointset pointset;
-    if (!CGAL::IO::read_XYZ("data/sphere.xyz", pointset))
+    if (!CGAL::IO::read_XYZ("../data/sphere.xyz", pointset))
     { 
         std::cerr << "Error: cannot read file " << std::endl;
         return EXIT_FAILURE;
@@ -41,14 +41,21 @@ int main()
         generators,
         distance_weight,
         qem::VERBOSE_LEVEL::HIGH,
-        qem::INIT_QEM_GENERATOR::RANDOM);
+        qem::INIT_QEM_GENERATORS::RANDOM);
 
     vsr.clustering(steps, split_threshold);
-    vsr.reconstruction();
-	auto mesh = vsr.get_reconstructed_mesh();
 
+    // Reconstruction parameters
+    const double dist_ratio = 10e-3;
+    const double fitting = 0.4;
+    const double coverage = 0.3;
+    const double complexity = 0.3;
+
+    vsr.reconstruction(dist_ratio, fitting, coverage, complexity, false);
+
+	auto mesh = vsr.get_reconstructed_mesh();
     std::ofstream mesh_file;
-    mesh_file.open("mesh.off");
+    mesh_file.open("simple_mesh.off");
     CGAL::write_off(mesh_file, mesh);
     mesh_file.close();
 

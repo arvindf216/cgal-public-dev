@@ -27,7 +27,6 @@ typedef CGAL::Point_set_3< Point, Vector > Pointset;
 
 int main()
 {	
-
     Pointset pointset;
     if (!CGAL::IO::read_XYZ( "../data/guitar.xyz",pointset))
     {
@@ -40,26 +39,26 @@ int main()
     const double distance_weight = 10e-5;
     size_t iteration = 0 ;
 	
-    qem::Variational_shape_reconstruction manager(
+    qem::Variational_shape_reconstruction vsr(
         pointset,
         generators,
         distance_weight,
         qem::VERBOSE_LEVEL::LOW,
         qem::INIT_QEM_GENERATORS::FARTHEST);
 
-    manager.clustering(steps, split_threshold);
+    vsr.clustering(steps, split_threshold);
     
     // Reconstruction parameters
     const double dist_ratio = 10e-3;
 	const double fitting = 0.4;
 	const double coverage = 0.3;
 	const double complexity = 0.3;
-	
-    manager.reconstruction(dist_ratio, fitting, coverage, complexity,true);
+    vsr.reconstruction(dist_ratio, fitting, coverage, complexity,true);
 
-	auto mesh = manager.get_reconstructed_mesh();
+    // save output mesh
+    auto mesh = vsr.get_reconstructed_mesh();
     std::ofstream mesh_file;
-    mesh_file.open("mesh.off");
+    mesh_file.open("soft_mesh.off");
     CGAL::write_off(mesh_file, mesh);
     mesh_file.close();
 

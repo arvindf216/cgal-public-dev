@@ -1,7 +1,7 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 
 #include <CGAL/Surface_mesh.h>
-#include <CGAL/Variational_shape_reconstruction/internal/metrics.h>
+#include <CGAL/Variational_shape_reconstruction/internal/qem.h>
 #include <iostream>
 #include <CGAL/Polygon_mesh_processing/connected_components.h>
 #include <CGAL/Point_set_3/IO/XYZ.h>

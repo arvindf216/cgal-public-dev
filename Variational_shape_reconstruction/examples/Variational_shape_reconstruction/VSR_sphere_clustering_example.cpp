@@ -29,14 +29,19 @@ int main()
 {	
     // fixme: this assumes that the normals are read from the file
     Pointset pointset;
-    if (!CGAL::IO::read_XYZ("../data/sphere.xyz",pointset))
+    std::string filename;
+    std::cin >> filename;
+    if (!CGAL::IO::read_XYZ("../../data/" + filename + ".xyz", pointset))
     {
         std::cerr << "Error: cannot read file " << std::endl;
         return EXIT_FAILURE;
     } 
 
-    size_t nb_generators = 20; 
+    size_t nb_generators = 200; 
     const FT distance_weight = FT(1e-20);
+    const double split_ratio = 0.1;
+    //the value of k in k nearest neighbours is 12
+    // it can be changed using vsr.set_knn( @param: number of neighbours )
 	
     qem::Variational_shape_reconstruction vsr(
         pointset,
@@ -45,26 +50,33 @@ int main()
         qem::VERBOSE_LEVEL::HIGH,
         qem::INIT_QEM_GENERATORS::RANDOM);
 
-    std::ofstream file("errors.csv");
-    const size_t iterations = 200;
+    const size_t iterations = 10;
     bool changed = true;
-    for(int i = 0; i < iterations; i++)
-    {
-        std::cout << "Iteration " << i << std::endl;
-        vsr.partition();
-        changed = vsr.update_generators();
-        const double total_error = vsr.compute_clustering_errors();
-        file << total_error << std::endl;
+    vsr.set_knn(6);
+    //vsr.partition_and_update_generators(iterations);
 
-        // save clustering to file every 10 iterations
-        if(i % 10 == 0)
-        {
-            std::string filename("clustering-");
-            filename.append(std::to_string(i));
-            filename.append(std::string(".ply"));
-            vsr.save_clustering_to_ply(filename);
-        }
-    }
+    // to track clusterings and errors
+    std::ofstream file("sphere_errors.csv");
+    file << "n_iterations" << "," << "Total Error" << "," << "Variance" << std::endl;
+    vsr.clustering_and_compute_errors(iterations, split_ratio, file, true);
+
+    //for(int i = 0; i < iterations; i++)
+    //{
+    //    std::cout<<"Iteration:"<<i<<std::endl;
+    //    vsr.partition();
+    //    changed = vsr.update_generators();
+    //    const std::pair<double,double> total_error = vsr.compute_clustering_errors();
+    //    file << i << "," << total_error.first << "," << total_error.second << std::endl;
+
+    //    // save clustering to file every 10 iterations
+    //    if(i % 10 == 0)
+    //    {
+    //        std::string filename("sphere_clustering-");
+    //        filename.append(std::to_string(i));
+    //        filename.append(std::string(".ply"));
+    //        vsr.save_clustering_to_ply(filename);
+    //    }
+    //}
     
     // reconstruction
     const double dist_ratio = 10e-3;
@@ -72,11 +84,12 @@ int main()
 	const double coverage = 0.3;
 	const double complexity = 0.3;
     vsr.reconstruction(dist_ratio, fitting, coverage, complexity, false);
+    //vsr.non_manifold_reconstruction(dist_ratio, fitting, coverage, complexity);
 
     // save output mesh
 	auto mesh = vsr.get_reconstructed_mesh();
     std::ofstream mesh_file;
-    mesh_file.open("sphere_mesh.off");
+    mesh_file.open(filename + "_mesh.off");
     CGAL::write_off(mesh_file, mesh);
     mesh_file.close();
 

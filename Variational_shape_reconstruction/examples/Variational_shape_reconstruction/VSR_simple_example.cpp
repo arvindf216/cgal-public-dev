@@ -24,7 +24,7 @@ typedef CGAL::Point_set_3< Point, Vector > Pointset;
 int main()
 {	
     Pointset pointset;
-    if (!CGAL::IO::read_XYZ("../data/sphere.xyz", pointset))
+    if (!CGAL::IO::read_XYZ("../../data/sphere.xyz", pointset))
     { 
         std::cerr << "Error: cannot read file " << std::endl;
         return EXIT_FAILURE;

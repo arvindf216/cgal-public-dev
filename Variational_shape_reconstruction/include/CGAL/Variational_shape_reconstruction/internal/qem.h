@@ -50,37 +50,37 @@ public: // functions
 
     Matrix4d get_4x4_svd_matrix()
     {
-        MatrixXd qem(4, 4);
+        MatrixXd qem_matrix(4, 4);
 
-        qem <<  m_tensor[0], m_tensor[1], m_tensor[2], m_tensor[3],
-                m_tensor[1], m_tensor[4], m_tensor[5], m_tensor[6],
-                m_tensor[2], m_tensor[5], m_tensor[7], m_tensor[8],
-                0.         , 0.         , 0.         , 1.;
+        qem_matrix <<  m_tensor[0], m_tensor[1], m_tensor[2], m_tensor[3],
+                       m_tensor[1], m_tensor[4], m_tensor[5], m_tensor[6],
+                       m_tensor[2], m_tensor[5], m_tensor[7], m_tensor[8],
+                       0.         , 0.         , 0.         , 1.;
 
-        return qem;
+        return qem_matrix;
     }
 
     Matrix4d get_4x4_matrix()
     {
-        MatrixXd qem(4, 4);
+        MatrixXd qem_matrix(4, 4);
+                               
+        qem_matrix <<  m_tensor[0], m_tensor[1], m_tensor[2], m_tensor[3],
+                       m_tensor[1], m_tensor[4], m_tensor[5], m_tensor[6],
+                       m_tensor[2], m_tensor[5], m_tensor[7], m_tensor[8],
+                       m_tensor[3], m_tensor[6], m_tensor[8], m_tensor[9];
 
-        qem <<  m_tensor[0], m_tensor[1], m_tensor[2], m_tensor[3],
-                m_tensor[1], m_tensor[4], m_tensor[5], m_tensor[6],
-                m_tensor[2], m_tensor[5], m_tensor[7], m_tensor[8],
-                m_tensor[3], m_tensor[6], m_tensor[8], m_tensor[9];
-
-        return qem;
+        return qem_matrix;
     }
 
     Matrix3d get_3x3_matrix()
     {
-        MatrixXd qem(3, 3);
+        MatrixXd qem_matrix(3, 3);
 
-        qem <<  m_tensor[0], m_tensor[1], m_tensor[2],
-                m_tensor[1], m_tensor[4], m_tensor[5],
-                m_tensor[2], m_tensor[5], m_tensor[7];
+        qem_matrix << m_tensor[0], m_tensor[1], m_tensor[2],
+                      m_tensor[1], m_tensor[4], m_tensor[5],
+                      m_tensor[2], m_tensor[5], m_tensor[7];
 
-        return qem;
+        return qem_matrix;
     }
 
     /// @brief Compute the tensor using a point and its normal and weighted by the area

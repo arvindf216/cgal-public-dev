@@ -704,5 +704,7 @@ class Variational_shape_reconstruction
     {
         m_triangle_fit.update_fit_soup(fit_soup_facets, fit_soup_normals);
     }
-};
+}; // end of class Variational_shape_reconstruction
+
+
 }

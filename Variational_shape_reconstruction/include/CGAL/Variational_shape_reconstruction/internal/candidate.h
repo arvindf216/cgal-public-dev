@@ -82,6 +82,45 @@ public:
     }
 };  // end of class PCandidate
 
+class MergeCandidate
+{
+private:
+    std::pair<int, int> m_label;
+    double m_loss;
+
+public:
+    MergeCandidate(int label_first, int label_second, double loss)
+    {
+        m_label.first = std::min(label_first, label_second);
+        m_label.second = std::max(label_first, label_second);
+        m_loss = loss;
+    }
+
+    ~MergeCandidate() {}
+
+    const double& loss() const { return m_loss; }
+    double& loss() { return m_loss; }
+
+    const int& label_first() const { return m_label.first; }
+    int& label_first() { return m_label.first; }
+
+    const int& label_second() const { return m_label.second; }
+    int& label_second() { return m_label.second; }
+
+    bool operator==(const MergeCandidate& obj) const
+    {
+        return m_label.first == obj.label_first() && m_label.second == obj.label_second();
+    }
+
+    bool partially_matches(const MergeCandidate& obj) const
+    {
+        return (m_label.first == obj.label_first() ||
+            m_label.second == obj.label_second() ||
+            m_label.first == obj.label_second() ||
+            m_label.second == obj.label_first());
+    }
+};  // end of class MergeCandidate
+
 
 template <class CCandidate>
 struct Candidate_more
@@ -89,7 +128,7 @@ struct Candidate_more
     // c1 > c2 means c1 is less prioritised over c2
     bool operator()(const CCandidate& c1, const CCandidate& c2)
     {
-        return c1.loss() > c2.loss();
+        return (c1.loss() > c2.loss());
     }
 
 }; // end of struct Candidate_more

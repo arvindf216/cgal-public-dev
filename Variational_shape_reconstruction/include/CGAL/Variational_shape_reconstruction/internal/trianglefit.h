@@ -111,12 +111,12 @@ public: // function
 
         // copy edges
         for(auto &elem: dual_edges)
-            m_edges.push_back(std::make_pair(std::min(elem.first, elem.second), std::max(elem.first, elem.second)));
+            m_edges.push_back(std::make_pair((std::min)(elem.first, elem.second), (std::max)(elem.first, elem.second)));
 
         // init bbox
         m_bbox = CGAL::bbox_3(m_points.begin(), m_points.end());
-        m_diag = std::sqrt(CGAL::squared_distance(Point(m_bbox.min(0), m_bbox.min(1), m_bbox.min(2)),
-                                                  Point(m_bbox.max(0), m_bbox.max(1), m_bbox.max(2))));
+        m_diag = (std::sqrt)(CGAL::squared_distance(Point((m_bbox.min(0)), (m_bbox.min(1)), (m_bbox.min(2))) ,
+                                                    Point((m_bbox.max(0)), (m_bbox.max(1)), (m_bbox.max(2)))));
     }
 
     bool create_candidate_facets()
@@ -464,7 +464,7 @@ public: // function
             //    std::cout << "Alpha extract mesh fails" << std::endl;
 
             double area = std::sqrt(CGAL::squared_area(m_points[m_facets[i][0]], m_points[m_facets[i][1]], m_points[m_facets[i][2]]));
-            double area_ratio = std::min(covered_area, area) / area;
+            double area_ratio = (std::min)(covered_area, area) / area;
 
             //std::cout << "Number of supported points: " << points.size() << std::endl;
             //std::cout << "Cover mesh size: " << covering_mesh.number_of_vertices() << std::endl;

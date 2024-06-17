@@ -29,7 +29,7 @@ int main()
 {	
 
     Pointset pointset;
-    if (!CGAL::IO::read_XYZ( "../data/guitar.xyz",pointset))
+    if (!CGAL::IO::read_XYZ( "../../data/guitar.xyz",pointset))
     {
         std::cerr << "Error: cannot read file " << std::endl;
         return EXIT_FAILURE;

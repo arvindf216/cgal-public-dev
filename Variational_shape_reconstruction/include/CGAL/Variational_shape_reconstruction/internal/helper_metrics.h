@@ -2,15 +2,14 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <map>
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Surface_mesh.h>
 
 #include <boost/function_output_iterator.hpp>
 #include <boost/property_map/property_map.hpp>
-#include <iostream>
-#include <fstream>
-#include <map>
+
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
 typedef Kernel::Point_3                                     Point;
@@ -126,7 +125,7 @@ class DataWriter
         
         for(auto e : m_data_error_generators)
         {
-            nb_iteration = std::max(nb_iteration,e.second.size()-1);
+            nb_iteration = (std::max)(nb_iteration, e.second.size() - 1);
         }
         std::cout<<"nb_iteration "<<nb_iteration<<"\n";
         for(int i = 0 ; i< nb_iteration;i++)

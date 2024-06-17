@@ -26,43 +26,49 @@ typedef CGAL::Second_of_pair_property_map<std::pair<Point, Vector>>             
 typedef CGAL::Point_set_3< Point, Vector > Pointset;
 
 int main()
-{	
+{
+    // fixme: this assumes that the normals are read from the file
     Pointset pointset;
-    if (!CGAL::IO::read_XYZ( "../../data/guitar.xyz",pointset))
+    std::string filename;
+    std::cin >> filename;
+    if (!CGAL::IO::read_XYZ("../../data/" + filename + ".xyz", pointset))
     {
         std::cerr << "Error: cannot read file " << std::endl;
         return EXIT_FAILURE;
-    } 
-    size_t generators = 30; 
-    const size_t steps = 10;
-    const double split_threshold = 10e-2;
-    const double distance_weight = 10e-5;
-    size_t iteration = 0 ;
-	
-    qem::Variational_shape_reconstruction vsr(
-        pointset,
-        generators,
-        distance_weight,
-        qem::VERBOSE_LEVEL::LOW,
-        qem::INIT_QEM_GENERATORS::FARTHEST);
+    }
 
-    vsr.clustering(steps, split_threshold);
-    
-    // Reconstruction parameters
+    int nb_clusters = 2000;
+    int num_knn = 6;
+
+    qem::Variational_shape_reconstruction_ftc vsr(
+        pointset,
+        nb_clusters,
+        num_knn,
+        qem::VERBOSE_LEVEL::HIGH);
+
+    //// clustering
+    //vsr.clustering();
+
+    // to track clusterings and errors
+    std::ofstream file("ftc_errors.csv");
+    file << "n_iterations" << "," << "Total Error" << "," << "Variance" << std::endl;
+    vsr.clustering_and_compute_errors(file);
+
+    // reconstruction
     const double dist_ratio = 10e-3;
-	const double fitting = 0.4;
-	const double coverage = 0.3;
-	const double complexity = 0.3;
-    vsr.reconstruction(dist_ratio, fitting, coverage, complexity,true);
+    const double fitting = 0.4;
+    const double coverage = 0.3;
+    const double complexity = 0.3;
+    vsr.reconstruction(dist_ratio, fitting, coverage, complexity, false);
 
     // save output mesh
     auto mesh = vsr.get_reconstructed_mesh();
     std::ofstream mesh_file;
-    mesh_file.open("soft_mesh.off");
+    mesh_file.open(filename + "_mesh_ftc.off");
     CGAL::write_off(mesh_file, mesh);
     mesh_file.close();
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
 

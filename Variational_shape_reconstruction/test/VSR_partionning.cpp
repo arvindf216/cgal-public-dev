@@ -72,7 +72,7 @@ void test_initialization()
         generators,
         distance_weight,
         qem::VERBOSE_LEVEL::LOW,
-        qem::INIT_QEM_GENERATOR::RANDOM);
+        qem::INIT_QEM_GENERATORS::RANDOM);
     
     std::cout<< "TEST PARTITIONNING \n";
     bool test_status = manager.is_partionning_valid();

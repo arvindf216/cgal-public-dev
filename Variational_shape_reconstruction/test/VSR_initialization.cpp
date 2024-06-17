@@ -42,7 +42,7 @@ typedef CGAL::Point_set_3< Point, Vector > Pointset;
 typedef CGAL::Surface_mesh_default_triangulation_3 Tr;
 void test_initialization()
 {
-    std::string fname = "spheres";
+    std::string fname = "sphere";
     Pointset pointset;
     if (!CGAL::IO::read_XYZ( "../data/"+fname+".xyz",pointset))
     {
@@ -72,7 +72,7 @@ void test_initialization()
         generators,
         distance_weight,
         qem::VERBOSE_LEVEL::LOW,
-        qem::INIT_QEM_GENERATOR::RANDOM);
+        qem::INIT_QEM_GENERATORS::RANDOM);
     std::cout<< "TEST INITIALIZATION \n";
     auto generators_per_component = manager.get_generators_per_component();
     bool test_status = true;

@@ -58,8 +58,8 @@ void test_generators_qem()
         generators,
         distance_weight,
         qem::VERBOSE_LEVEL::HIGH,
-        qem::INIT_QEM_GENERATOR::RANDOM);
-    manager.region_growing_and_update_poles(steps);
+        qem::INIT_QEM_GENERATORS::RANDOM);
+    manager.partition_and_update_generators(steps);
     manager.write_csv();
     // todo check evolution generators
 }

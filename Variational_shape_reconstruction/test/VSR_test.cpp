@@ -162,11 +162,11 @@ void test_point_set(const std::string fname)
         generators,
         distance_weight,
         qem::VERBOSE_LEVEL::HIGH,
-        qem::INIT_QEM_GENERATOR::RANDOM);
+        qem::INIT_QEM_GENERATORS::RANDOM);
         std::chrono::steady_clock::time_point begin_clustering = std::chrono::steady_clock::now();
     while(new_generators > 5 )
     {
-        manager.region_growing_and_update_poles(steps);
+        manager.partition_and_update_generators(steps);
         new_generators = manager.guided_split_clusters(split_threshold, iteration++);
     }
     std::chrono::steady_clock::time_point end_clustering = std::chrono::steady_clock::now();

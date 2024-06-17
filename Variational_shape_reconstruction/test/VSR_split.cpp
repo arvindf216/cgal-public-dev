@@ -72,10 +72,10 @@ void test_initialization()
         generators,
         distance_weight,
         qem::VERBOSE_LEVEL::LOW,
-        qem::INIT_QEM_GENERATOR::RANDOM);
+        qem::INIT_QEM_GENERATORS::RANDOM);
     
     std::cout<< "TEST SPLITTING \n";
-    manager.region_growing_and_update_poles(steps);
+    manager.partition_and_update_generators(steps);
     new_generators = manager.guided_split_clusters(split_threshold, 0);
 
     bool test_status = new_generators > 0 ? true : false;
